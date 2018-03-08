@@ -43,15 +43,14 @@
 (global-set-key (kbd "C-M-j") 'beginning-of-line)
 (global-set-key (kbd "C-M-l") 'end-of-line)
 
-;; page moving command
-(global-set-key (kbd "C-\;") 'recenter)
 
 
-;; remove some thing
 (global-set-key (kbd "C-n") nil)
 (define-key key-translation-map [?\C-n] [?\C-?]) ;; remap backspace
 (global-set-key (kbd "M-n") 'backward-kill-word)
 (global-set-key (kbd "M-m") 'kill-whole-line)
+
+
 
 ;; Searching command
 (global-set-key (kbd "C-s") 'isearch-backward)
@@ -65,25 +64,20 @@
 
 
 ;; Quick editing
-(global-set-key (kbd "M-w") 'kill-region) ;; cut
-(global-set-key (kbd "C-e") 'yank) ;; paste
+(global-set-key (kbd "M-w") 'kill-region)    ;; cut
+(global-set-key (kbd "C-e") 'yank)           ;; paste
 (global-set-key (kbd "C-w") 'kill-ring-save) ;; copy
 (global-set-key (kbd "C-\'") 'undo)
+
 
 
 ;; misc stuff
 (global-set-key (kbd "C-f") 'find-file) ;; open file
 (global-set-key (kbd "C-o") 'other-window)
 (global-set-key (kbd "C-r") (kbd "C-M-j C-SPC C-M-l")) ;; mark line
+(global-set-key (kbd "C-\;") 'recenter)
 
 
-;; (defun insert-mark()
-;;   ;; marking localation by insert special string 
-;;   (interactive)
-;;   (insert "??%$%$%??")
-;;   (execute-kbd-macro (kbd "C-x C-\;"))
-;;   )
-;; (global-set-key (kbd "C-p") 'insert-mark)
 
 ;; start with 2 window side by side
 ;; (split-window-right)
