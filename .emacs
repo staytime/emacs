@@ -18,7 +18,7 @@
 (global-set-key (kbd "M-f") nil)
 (global-set-key (kbd "M-d") nil)
 (global-set-key (kbd "M-b") nil)
-
+(global-set-key (kbd "M-y") nil)
 
 
 ;; point moving command
@@ -45,13 +45,6 @@
 
 
 
-(global-set-key (kbd "C-n") nil)
-(define-key key-translation-map [?\C-n] [?\C-?]) ;; remap backspace
-(global-set-key (kbd "M-n") 'backward-kill-word)
-(global-set-key (kbd "M-m") 'kill-whole-line)
-
-
-
 ;; Searching command
 (global-set-key (kbd "C-s") 'isearch-backward)
 (global-set-key (kbd "C-d") 'isearch-forward)
@@ -63,9 +56,16 @@
 
 
 
-;; Quick editing
+;; editing command
+(global-set-key (kbd "C-n") nil)
+
+(define-key key-translation-map [?\C-n] [?\C-?]) ;; remap backspace
+(global-set-key (kbd "M-n") 'backward-kill-word)
+(global-set-key (kbd "M-m") 'kill-whole-line)
+
 (global-set-key (kbd "M-w") 'kill-region)    ;; cut
 (global-set-key (kbd "C-e") 'yank)           ;; paste
+(global-set-key (kbd "M-e") 'yank-pop)
 (global-set-key (kbd "C-w") 'kill-ring-save) ;; copy
 (global-set-key (kbd "C-\'") 'undo)
 
@@ -74,16 +74,21 @@
 ;; misc stuff
 (global-set-key (kbd "C-f") 'find-file) ;; open file
 (global-set-key (kbd "C-o") 'other-window)
+(global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "C-r") (kbd "C-M-j C-SPC C-M-l")) ;; mark line
+
 (global-set-key (kbd "C-\;") 'recenter)
+(global-set-key (kbd "M-\;") 'move-to-window-line-top-bottom)
+;; M-!		shell-command
+;; M-a		backward-sentence
 
 
+(setq inhibit-startup-screen t)
 
-;; start with 2 window side by side
-;; (split-window-right)
-;; (split-window-horizontally)
+(defun post-load-stuff ()
+  (interactive)
+  (toggle-frame-maximized)
+  (split-window-horizontally)
+  )
 
-
-
-
-
+(add-hook 'window-setup-hook 'post-load-stuff t)
