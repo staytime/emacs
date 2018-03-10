@@ -1,8 +1,5 @@
 
-
-
-(ido-mode 1)
-
+;; emacs configuration
 
 
 ;; command key be replaced
@@ -67,7 +64,7 @@
 (global-set-key (kbd "C-e") 'yank)           ;; paste
 (global-set-key (kbd "M-e") 'yank-pop)
 (global-set-key (kbd "C-w") 'kill-ring-save) ;; copy
-(global-set-key (kbd "C-\'") 'undo)
+;; (global-set-key (kbd "C-\'") 'undo)
 
 
 
@@ -83,7 +80,14 @@
 ;; M-a		backward-sentence
 
 
-(setq inhibit-startup-screen t)
+
+(ido-mode 1)
+(tool-bar-mode -1)
+(electric-pair-mode 1) ;; enbale electric-pair-mode
+
+(setq inhibit-startup-screen t) ;; disable welcome screen
+
+
 
 (defun post-load-stuff ()
   (interactive)
