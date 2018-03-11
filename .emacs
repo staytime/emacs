@@ -70,6 +70,7 @@
 
 ;; misc stuff
 (global-set-key (kbd "C-f") 'find-file) ;; open file
+(global-set-key (kbd "M-f") 'find-file-other-window) ;; open file
 (global-set-key (kbd "C-o") 'other-window)
 (global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "C-r") (kbd "C-M-j C-SPC C-M-l")) ;; mark line
