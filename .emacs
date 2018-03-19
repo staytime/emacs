@@ -1,7 +1,7 @@
 
 
-;; emacs configuration
 
+;; emacs configuration
 
 
 
@@ -49,7 +49,7 @@
 
 
 
-;; editing command
+;; Nditing command
 (global-set-key (kbd "C-n") nil)
 
 (define-key key-translation-map [?\C-n] [?\C-?]) ;; remap backspace
@@ -58,20 +58,30 @@
 
 (global-set-key (kbd "C-y") 'nil)
 (global-set-key (kbd "M-y") 'nil)
+
 (global-set-key (kbd "C-w") 'kill-ring-save) ;; copy
 (global-set-key (kbd "M-w") 'kill-region)    ;; cut
 (global-set-key (kbd "C-e") 'yank)           ;; paste
 (global-set-key (kbd "M-e") 'yank-pop)
-;; (global-set-key (kbd "C-\'") 'undo)
+
+
+
+;; shell mode binding
+;; (require 'comint)
+;; (define-key shell-mode-map [?\C-i] 'comint-previous-input)
 
 
 
 ;; misc stuff
+;; (global-set-key (kbd "C-\'") 'undo)
+
 (global-set-key (kbd "C-a") 'find-file)
 (global-set-key (kbd "M-a") 'find-file-other-window)
 
 (global-set-key (kbd "C-o") 'other-window)
 (global-set-key (kbd "M-o") 'recenter)
+(global-set-key (kbd "C-M-o") 'switch-to-buffer)
+
 (global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "C-\;") 'comment-line)
 (global-set-key (kbd "C-r") (kbd "C-M-j C-SPC C-M-l")) ;; mark line
@@ -89,8 +99,19 @@
 (tool-bar-mode -1)
 (electric-pair-mode 1)          ;; enbale electric-pair-mode
 
+(show-paren-mode 1)
+(setq show-paren-delay 0)
+(setq show-paren-when-point-inside-paren t)
+;; (setq show-paren-when-point-in-periphery t)
+
 (setq column-number-mode t)     ;; display column
 (setq inhibit-startup-screen t) ;; disable welcome screen
+
+;; move backup file to /tmp
+(setq backup-directory-alist `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+
+
 
 (defun post-load-stuff ()
   (interactive)
@@ -108,5 +129,3 @@
 ;; M-!		shell-command
 ;; M-a		backward-sentence
 ;; mark-defun
-
-
