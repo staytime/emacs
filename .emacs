@@ -1,10 +1,42 @@
 
 
 
-;; emacs configuration
+
+
+(require 'package)
+
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(package-initialize)
 
 
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages (quote (auto-complete))))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+
+
+
+
+;; config for auto-complete
+(require 'auto-complete)
+
+(global-auto-complete-mode t)
+
+(setq ac-use-menu-map t)
+(define-key ac-menu-map "\C-n" 'nil)
+(define-key ac-menu-map "\C-p" 'ac-next)
 
 ;; point moving command
 
@@ -44,12 +76,12 @@
 ;; keybinding in isearch-mode
 (define-key isearch-mode-map [?\C-d] 'isearch-repeat-forward)
 (define-key isearch-mode-map [?\C-s] 'isearch-repeat-backward)
-(define-key isearch-mode-map [?\C-e] 'isearch-yank-kill)       ;; pasting into search box (when search)
+(define-key isearch-mode-map [?\C-e] 'isearch-yank-kill)
 ;; (define-key isearch-mode-map (kbd "C-c") 'isearch-edit-string)
 
 
 
-;; Nditing command
+;; Editing command
 (global-set-key (kbd "C-n") nil)
 
 (define-key key-translation-map [?\C-n] [?\C-?]) ;; remap backspace
@@ -59,9 +91,9 @@
 (global-set-key (kbd "C-y") 'nil)
 (global-set-key (kbd "M-y") 'nil)
 
-(global-set-key (kbd "C-w") 'kill-ring-save) ;; copy
-(global-set-key (kbd "M-w") 'kill-region)    ;; cut
-(global-set-key (kbd "C-e") 'yank)           ;; paste
+(global-set-key (kbd "C-w") 'kill-ring-save)
+(global-set-key (kbd "M-w") 'kill-region)
+(global-set-key (kbd "C-e") 'yank)
 (global-set-key (kbd "M-e") 'yank-pop)
 
 
@@ -73,8 +105,6 @@
 
 
 ;; misc stuff
-;; (global-set-key (kbd "C-\'") 'undo)
-
 (global-set-key (kbd "C-a") 'find-file)
 (global-set-key (kbd "M-a") 'find-file-other-window)
 
@@ -97,21 +127,17 @@
 
 (ido-mode 1)
 (tool-bar-mode -1)
-(electric-pair-mode 1)          ;; enbale electric-pair-mode
+(electric-pair-mode 1) ;; enbale electric-pair-mode
+(setq column-number-mode t) ;; display column
+(setq inhibit-startup-screen t) ;; disable welcome screen
 
 (show-paren-mode 1)
 (setq show-paren-delay 0)
 (setq show-paren-when-point-inside-paren t)
-;; (setq show-paren-when-point-in-periphery t)
-
-(setq column-number-mode t)     ;; display column
-(setq inhibit-startup-screen t) ;; disable welcome screen
 
 ;; move backup file to /tmp
 (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
-
-
 
 (defun post-load-stuff ()
   (interactive)
@@ -121,11 +147,10 @@
 
 (add-hook 'window-setup-hook 'post-load-stuff t)
 
-
-
-
-
 ;; (global-set-key (kbd "M-\;") 'move-to-window-line-top-bottom)
 ;; M-!		shell-command
 ;; M-a		backward-sentence
 ;; mark-defun
+
+
+
