@@ -2,5 +2,7 @@
 
 .emacs.d/auto-save-list/
 .emacs.d/bookmarks
-session.*
-
+.emacs.d/session.*
+.emacs.d/ac-comphist.dat
+.emacs.d/ido.last
+*~
