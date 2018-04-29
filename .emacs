@@ -29,11 +29,11 @@
 ;; config for auto-complete
 (require 'auto-complete)
 (global-auto-complete-mode t)
-(setq ac-delay 0.01)
+;; (setq ac-delay 0.01)
+(setq ac-auto-show-menu 0.2)
 (setq ac-use-menu-map t)
 (define-key ac-menu-map (kbd "C-n") 'nil)
 (define-key ac-menu-map (kbd "C-M-k") 'ac-next)
-
 
 
 ;; point moving command
@@ -115,6 +115,7 @@
   (beginning-of-line)
   (set-mark-command nil)
   (end-of-line)
+  (beep)
   )
 
 (global-set-key (kbd "C-r") 'marking-line)
@@ -157,6 +158,7 @@
 ;; move backup file to /tmp
 (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+
 
 
 ;; (global-set-key (kbd "M-\;") 'move-to-window-line-top-bottom)
