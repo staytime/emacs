@@ -29,11 +29,15 @@
 ;; config for auto-complete
 (require 'auto-complete)
 (global-auto-complete-mode t)
-;; (setq ac-delay 0.01)
 (setq ac-auto-show-menu 0.2)
 (setq ac-use-menu-map t)
 (define-key ac-menu-map (kbd "C-n") 'nil)
 (define-key ac-menu-map (kbd "C-M-k") 'ac-next)
+
+(require 'shell)
+(require 'comint)
+(define-key shell-mode-map (kbd "C-M-i") 'comint-previous-input)
+(define-key shell-mode-map (kbd "C-M-k") 'comint-next-input)
 
 
 ;; point moving command
@@ -58,6 +62,9 @@
 (global-set-key (kbd "M-j") 'backward-word)
 (global-set-key (kbd "C-M-j") 'beginning-of-line)
 (global-set-key (kbd "C-M-l") 'end-of-line)
+(global-set-key (kbd "C-p") 'scroll-up-command)
+(global-set-key (kbd "M-p") 'scroll-down-command)
+;; C-v		scroll-up-command
 
 
 
@@ -69,13 +76,14 @@
 
 (global-set-key (kbd "C-d") 'isearch-forward)
 (global-set-key (kbd "C-M-d") 'isearch-forward-regexp)
-(global-set-key (kbd "C-s") 'isearch-backward)
-(global-set-key (kbd "C-M-s") 'isearch-backward-regexp)
+;; (global-set-key (kbd "C-s") 'isearch-backward)
+;; (global-set-key (kbd "C-M-s") 'isearch-backward-regexp)
 
 ;; keybinding in isearch-mode
 (define-key isearch-mode-map [?\C-d] 'isearch-repeat-forward)
 (define-key isearch-mode-map [?\C-s] 'isearch-repeat-backward)
 (define-key isearch-mode-map [?\C-e] 'isearch-yank-kill)
+;; (define-key isearch-mode-map (kbd "C-n") 'isearch-del-char)
 
 ;; Editing command
 (global-unset-key (kbd "C-n"))
@@ -109,6 +117,8 @@
 (global-set-key (kbd "M-\;") 'comment-dwim)
 (define-key key-translation-map (kbd "C-\'") (kbd "\-")) ;; temporary adding in
 
+
+
 (defun marking-line ()
   ;; marking the current line
   (interactive)
@@ -119,6 +129,7 @@
   )
 
 (global-set-key (kbd "C-r") 'marking-line)
+;; (global-set-key (kbd "M-r") 'marking-word)
 
 (defun create-buffer ()
   "create empty buffer"
