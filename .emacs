@@ -24,6 +24,9 @@
  ;; If there is more than one, they won't work right.
  )
 
+;; removing keybinding
+;; (global-unset-key (kbd "C-h"))
+
 
 
 ;; config for auto-complete
@@ -38,6 +41,9 @@
 (require 'comint)
 (define-key shell-mode-map (kbd "C-M-i") 'comint-previous-input)
 (define-key shell-mode-map (kbd "C-M-k") 'comint-next-input)
+(define-key shell-mode-map (kbd "M-n") 'backward-kill-word)
+(define-key shell-mode-map (kbd "C-M-l") 'end-of-line)
+
 
 
 ;; point moving command
@@ -64,7 +70,6 @@
 (global-set-key (kbd "C-M-l") 'end-of-line)
 (global-set-key (kbd "C-p") 'scroll-up-command)
 (global-set-key (kbd "M-p") 'scroll-down-command)
-;; C-v		scroll-up-command
 
 
 
@@ -73,6 +78,11 @@
 ;; remove old key setting
 (global-unset-key (kbd "C-M-r"))
 (define-key isearch-mode-map [?\C-r] nil)
+(global-unset-key (kbd "M-d"))
+;; (global-unset-key (kbd "C-M-d"))
+(global-unset-key (kbd "C-s"))
+(global-unset-key (kbd "M-s"))
+(global-unset-key (kbd "C-M-s"))
 
 (global-set-key (kbd "C-d") 'isearch-forward)
 (global-set-key (kbd "C-M-d") 'isearch-forward-regexp)
@@ -97,8 +107,6 @@
 (global-set-key (kbd "C-e") 'yank)
 (global-set-key (kbd "M-e") 'yank-pop)
 
-
-
 ;; shell mode binding
 ;; (define-key comint-mode-map (kbd "<up>") 'comint-previous-input)
 
@@ -116,8 +124,7 @@
 (global-set-key (kbd "C-\;") 'comment-line)
 (global-set-key (kbd "M-\;") 'comment-dwim)
 (define-key key-translation-map (kbd "C-\'") (kbd "\-")) ;; temporary adding in
-
-
+;; (global-set-key (kbd "C-x h") 'help-command)
 
 (defun marking-line ()
   ;; marking the current line
@@ -129,7 +136,6 @@
   )
 
 (global-set-key (kbd "C-r") 'marking-line)
-;; (global-set-key (kbd "M-r") 'marking-word)
 
 (defun create-buffer ()
   "create empty buffer"
@@ -153,10 +159,14 @@
 (setq show-paren-when-point-inside-paren t)
 
 ;; set custome font
-;; (setq st-custome-font '"Fira Code light-11")
-(setq st-custome-font "Fira Code-11")
-(set-face-attribute 'default nil :font st-custome-font)
-(set-frame-font st-custome-font nil t)
+;; (setq st-chosen-font '"Fira Code light-11")
+(setq st-chosen-font "Fira Code-11")
+(set-face-attribute 'default nil :font st-chosen-font)
+(set-frame-font st-chosen-font nil t)
+
+;; move backup file to /tmp
+(setq backup-directory-alist `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
 (defun post-load-stuff ()
   (interactive)
@@ -165,11 +175,6 @@
   )
 
 (add-hook 'window-setup-hook 'post-load-stuff t)
-
-;; move backup file to /tmp
-(setq backup-directory-alist `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
-
 
 
 ;; (global-set-key (kbd "M-\;") 'move-to-window-line-top-bottom)
