@@ -26,6 +26,9 @@
 
 ;; removing keybinding
 ;; (global-unset-key (kbd "C-h"))
+(global-unset-key (kbd "C-s"))
+(global-unset-key (kbd "M-s"))
+(global-unset-key (kbd "C-M-s"))
 
 
 
@@ -37,6 +40,7 @@
 (define-key ac-menu-map (kbd "C-n") 'nil)
 (define-key ac-menu-map (kbd "C-M-k") 'ac-next)
 
+;; shell mode binding
 (require 'shell)
 (require 'comint)
 (define-key shell-mode-map (kbd "C-M-i") 'comint-previous-input)
@@ -79,10 +83,6 @@
 (global-unset-key (kbd "C-M-r"))
 (define-key isearch-mode-map [?\C-r] nil)
 (global-unset-key (kbd "M-d"))
-;; (global-unset-key (kbd "C-M-d"))
-(global-unset-key (kbd "C-s"))
-(global-unset-key (kbd "M-s"))
-(global-unset-key (kbd "C-M-s"))
 
 (global-set-key (kbd "C-d") 'isearch-forward)
 (global-set-key (kbd "C-M-d") 'isearch-forward-regexp)
@@ -95,6 +95,8 @@
 (define-key isearch-mode-map [?\C-e] 'isearch-yank-kill)
 ;; (define-key isearch-mode-map (kbd "C-n") 'isearch-del-char)
 
+
+
 ;; Editing command
 (global-unset-key (kbd "C-n"))
 (define-key key-translation-map [?\C-n] [?\C-?]) ;; remap backspace
@@ -106,9 +108,6 @@
 (global-set-key (kbd "M-w") 'kill-region)
 (global-set-key (kbd "C-e") 'yank)
 (global-set-key (kbd "M-e") 'yank-pop)
-
-;; shell mode binding
-;; (define-key comint-mode-map (kbd "<up>") 'comint-previous-input)
 
 
 
@@ -123,9 +122,13 @@
 (global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "C-\;") 'comment-line)
 (global-set-key (kbd "M-\;") 'comment-dwim)
-(define-key key-translation-map (kbd "C-\'") (kbd "\-")) ;; temporary adding in
+;; (define-key key-translation-map (kbd "C-\'") (kbd "\-")) ;; temporary adding in
 ;; (global-set-key (kbd "C-x h") 'help-command)
+;; (global-set-key (kbd "C-x s") 'previous-buffer)
+;; (global-set-key (kbd "C-x d") 'next-buffer)
+;; C-x s		save-some-buffers
 
+;; custome function
 (defun marking-line ()
   ;; marking the current line
   (interactive)
@@ -135,13 +138,14 @@
   (beep)
   )
 
-(global-set-key (kbd "C-r") 'marking-line)
-
 (defun create-buffer ()
   "create empty buffer"
   (interactive)
   (switch-to-buffer (generate-new-buffer "new-file")))
 
+;; binding custome command
+(global-set-key (kbd "C-r") 'marking-line)
+(global-set-key (kbd "M-r") 'exchange-point-and-mark)
 (global-set-key (kbd "C-x w") 'create-buffer)
 
 
