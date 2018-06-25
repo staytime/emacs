@@ -24,11 +24,46 @@
  ;; If there is more than one, they won't work right.
  )
 
+
+
+;; setup env
+(ido-mode 1)
+(tool-bar-mode -1) ;; hide tool bar
+(setq column-number-mode t)
+(setq inhibit-startup-screen t) ;; disable welcome screen
+(electric-pair-mode 1) ;; enbale electric-pair-mode
+(show-paren-mode t)
+(setq show-paren-delay 0)
+(setq show-paren-when-point-inside-paren t)
+
+;; move backup file to /tmp
+(setq backup-directory-alist `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+
+;; set custome font
+;; (setq st-chosen-font "Fira Code light-11")
+(setq st-chosen-font "Fira Code-11")
+(set-face-attribute 'default nil :font st-chosen-font)
+(set-frame-font st-chosen-font nil t)
+
+(defun post-load-stuff ()
+  (interactive)
+  (toggle-frame-maximized)
+  (split-window-horizontally)
+  )
+
+(add-hook 'window-setup-hook 'post-load-stuff t)
+
+
+
+
+
 ;; removing keybinding
-;; (global-unset-key (kbd "C-h"))
 (global-unset-key (kbd "C-s"))
 (global-unset-key (kbd "M-s"))
 (global-unset-key (kbd "C-M-s"))
+
+
 
 
 
@@ -79,21 +114,17 @@
 
 ;; Searching command
 
-;; remove old key setting
-(global-unset-key (kbd "C-M-r"))
-(define-key isearch-mode-map [?\C-r] nil)
+;; remove old key setting & rebind
 (global-unset-key (kbd "M-d"))
-
+(global-unset-key (kbd "C-M-r"))
 (global-set-key (kbd "C-d") 'isearch-forward)
 (global-set-key (kbd "C-M-d") 'isearch-forward-regexp)
-;; (global-set-key (kbd "C-s") 'isearch-backward)
-;; (global-set-key (kbd "C-M-s") 'isearch-backward-regexp)
 
 ;; keybinding in isearch-mode
+(define-key isearch-mode-map [?\C-r] nil)
 (define-key isearch-mode-map [?\C-d] 'isearch-repeat-forward)
 (define-key isearch-mode-map [?\C-s] 'isearch-repeat-backward)
 (define-key isearch-mode-map [?\C-e] 'isearch-yank-kill)
-;; (define-key isearch-mode-map (kbd "C-n") 'isearch-del-char)
 
 
 
@@ -122,15 +153,9 @@
 (global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "C-\;") 'comment-line)
 (global-set-key (kbd "M-\;") 'comment-dwim)
-;; (define-key key-translation-map (kbd "C-\'") (kbd "\-")) ;; temporary adding in
-;; (global-set-key (kbd "C-x h") 'help-command)
-;; (global-set-key (kbd "C-x s") 'previous-buffer)
-;; (global-set-key (kbd "C-x d") 'next-buffer)
-;; C-x s		save-some-buffers
 
-;; custome function
 (defun marking-line ()
-  ;; marking the current line
+  "marking the current line"
   (interactive)
   (beginning-of-line)
   (set-mark-command nil)
@@ -138,50 +163,27 @@
   (beep)
   )
 
+(global-set-key (kbd "C-r") 'marking-line)
+(global-set-key (kbd "M-r") 'exchange-point-and-mark)
+
 (defun create-buffer ()
   "create empty buffer"
   (interactive)
   (switch-to-buffer (generate-new-buffer "new-file")))
 
-;; binding custome command
-(global-set-key (kbd "C-r") 'marking-line)
-(global-set-key (kbd "M-r") 'exchange-point-and-mark)
 (global-set-key (kbd "C-x w") 'create-buffer)
 
-
-
-(ido-mode 1)
-
-;; setup ui
-(tool-bar-mode -1) ;; hide tool bar
-(setq column-number-mode t)
-(setq inhibit-startup-screen t) ;; disable welcome screen
-
-(electric-pair-mode 1) ;; enbale electric-pair-mode
-(show-paren-mode t)
-(setq show-paren-delay 0)
-(setq show-paren-when-point-inside-paren t)
-
-;; set custome font
-;; (setq st-chosen-font '"Fira Code light-11")
-(setq st-chosen-font "Fira Code-11")
-(set-face-attribute 'default nil :font st-chosen-font)
-(set-frame-font st-chosen-font nil t)
-
-;; move backup file to /tmp
-(setq backup-directory-alist `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
-
-(defun post-load-stuff ()
+(defun open-config ()
   (interactive)
-  (toggle-frame-maximized)
-  (split-window-horizontally)
-  )
+  (find-file "~/.emacs"))
 
-(add-hook 'window-setup-hook 'post-load-stuff t)
+(global-set-key (kbd "C-h u") 'open-config)
 
 
-;; (global-set-key (kbd "M-\;") 'move-to-window-line-top-bottom)
-;; M-!		shell-command
-;; M-a		backward-sentence
-;; mark-defun
+
+
+;; new function in trial
+;; M-.		xref-find-definitions
+(global-set-key (kbd "C-\,") 'next-buffer)
+(global-set-key (kbd "M-\,") 'previous-buffer)
+
