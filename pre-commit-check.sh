@@ -1,0 +1,1 @@
+meld ~/.emacs ./.emacs
