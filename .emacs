@@ -78,8 +78,10 @@
 ;; shell mode binding
 (require 'shell)
 (require 'comint)
-(define-key shell-mode-map (kbd "C-M-i") 'comint-previous-input)
-(define-key shell-mode-map (kbd "C-M-k") 'comint-next-input)
+;; (define-key shell-mode-map (kbd "C-M-i") 'comint-previous-input)
+;; (define-key shell-mode-map (kbd "C-M-k") 'comint-next-input)
+(define-key shell-mode-map (kbd "C-p") 'comint-previous-input)
+(define-key shell-mode-map (kbd "M-p") 'comint-next-input)
 (define-key shell-mode-map (kbd "M-n") 'backward-kill-word)
 (define-key shell-mode-map (kbd "C-M-l") 'end-of-line)
 
@@ -107,8 +109,8 @@
 (global-set-key (kbd "M-j") 'backward-word)
 (global-set-key (kbd "C-M-j") 'beginning-of-line)
 (global-set-key (kbd "C-M-l") 'end-of-line)
-(global-set-key (kbd "C-p") 'scroll-up-command)
-(global-set-key (kbd "M-p") 'scroll-down-command)
+;; (global-set-key (kbd "C-p") 'scroll-up-command)
+;; (global-set-key (kbd "M-p") 'scroll-down-command)
 
 
 
