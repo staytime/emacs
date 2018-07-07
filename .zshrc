@@ -100,5 +100,5 @@ function gi() { curl -L -s https://www.gitignore.io/api/$@ ;}
 bindkey '^f' expand-or-complete
 bindkey '^n' backward-delete-char
 bindkey '^[n' backward-delete-word
-bindkey '^[m' down-history 
+# bindkey '^[m' down-history 
 alias py=python
