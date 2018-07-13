@@ -57,9 +57,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(
-    git pip
-)
+plugins=(git pipenv sudo)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -96,9 +94,14 @@ export PATH=$HOME/.local/bin:$PATH
 
 alias emacs='emacs --no-splash'
 function gi() { curl -L -s https://www.gitignore.io/api/$@ ;}
+alias py='python'
+alias penv='pipenv shell'
 
 bindkey '^f' expand-or-complete
 bindkey '^n' backward-delete-char
 bindkey '^[n' backward-delete-word
-# bindkey '^[m' down-history 
-alias py=python
+bindkey '^[m' down-history 
+# bindkey '^i' up-history 
+bindkey '^[p' down-history
+
+
