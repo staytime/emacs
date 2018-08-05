@@ -49,8 +49,7 @@
 (defun post-load-stuff ()
   (interactive)
   (toggle-frame-maximized)
-  (split-window-horizontally)
-  )
+  (split-window-horizontally))
 
 (add-hook 'window-setup-hook 'post-load-stuff t)
 
@@ -87,6 +86,7 @@
 (define-key shell-mode-map (kbd "M-p") 'comint-next-input)
 (define-key shell-mode-map (kbd "M-n") 'backward-kill-word)
 (define-key shell-mode-map (kbd "C-M-l") 'end-of-line)
+(define-key shell-mode-map (kbd "C-d") 'isearch-forward)
 
 
 
@@ -131,8 +131,6 @@
 (define-key isearch-mode-map [?\C-s] 'isearch-repeat-backward)
 (define-key isearch-mode-map [?\C-e] 'isearch-yank-kill)
 
-
-
 ;; Editing command
 (global-unset-key (kbd "C-n"))
 (define-key key-translation-map [?\C-n] [?\C-?]) ;; remap backspace
@@ -144,8 +142,6 @@
 (global-set-key (kbd "M-w") 'kill-region)
 (global-set-key (kbd "C-e") 'yank)
 (global-set-key (kbd "M-e") 'yank-pop)
-
-
 
 ;; misc stuff
 (global-set-key (kbd "C-a") 'find-file)
@@ -170,6 +166,7 @@ the beginning of the line.
 
 If ARG is not nil or 1, move forward ARG - 1 lines first.  If
 point reaches the beginning or end of the buffer, stop there."
+  
   (interactive "^p")
   (setq arg (or arg 1))
 
@@ -189,8 +186,7 @@ point reaches the beginning or end of the buffer, stop there."
   (smarter-move-beginning-of-line nil)
   (set-mark-command nil)
   (end-of-line)
-  (beep)
-  )
+  (beep))
 
 (global-set-key (kbd "C-M-j") 'smarter-move-beginning-of-line)
 (global-set-key (kbd "C-r") 'marking-line)
