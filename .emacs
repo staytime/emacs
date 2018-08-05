@@ -73,7 +73,10 @@
 (setq ac-auto-show-menu 0.2)
 (setq ac-use-menu-map t)
 (define-key ac-menu-map (kbd "C-n") 'nil)
-(define-key ac-menu-map (kbd "C-M-k") 'ac-next)
+(define-key ac-menu-map (kbd "C-p") 'ac-next)
+(define-key ac-menu-map (kbd "M-k") 'ac-previous)
+
+
 
 ;; shell mode binding
 (require 'shell)
