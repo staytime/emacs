@@ -73,8 +73,7 @@
 (setq ac-use-menu-map t)
 (define-key ac-menu-map (kbd "C-n") 'nil)
 (define-key ac-menu-map (kbd "C-p") 'ac-next)
-(define-key ac-menu-map (kbd "M-k") 'ac-previous)
-
+(define-key ac-menu-map (kbd "M-p") 'ac-previous)
 
 
 ;; shell mode binding
@@ -112,8 +111,6 @@
 (global-set-key (kbd "M-j") 'backward-word)
 (global-set-key (kbd "C-M-j") 'beginning-of-line)
 (global-set-key (kbd "C-M-l") 'end-of-line)
-;; (global-set-key (kbd "C-p") 'scroll-up-command)
-;; (global-set-key (kbd "M-p") 'scroll-down-command)
 
 
 
