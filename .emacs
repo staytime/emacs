@@ -71,11 +71,11 @@
 (global-auto-complete-mode t)
 (setq ac-auto-show-menu 0.2)
 (setq ac-use-menu-map t)
+(global-unset-key (kbd "C-p"))
+(global-unset-key (kbd "M-p"))
 (define-key ac-menu-map (kbd "C-n") 'nil)
 (define-key ac-menu-map (kbd "C-p") 'ac-next)
-(define-key ac-menu-map (kbd "M-k") 'ac-previous)
-
-
+(define-key ac-menu-map (kbd "M-p") 'ac-previous)
 
 ;; shell mode binding
 (require 'shell)
@@ -131,6 +131,8 @@
 (define-key isearch-mode-map [?\C-s] 'isearch-repeat-backward)
 (define-key isearch-mode-map [?\C-e] 'isearch-yank-kill)
 
+
+
 ;; Editing command
 (global-unset-key (kbd "C-n"))
 (define-key key-translation-map [?\C-n] [?\C-?]) ;; remap backspace
@@ -142,6 +144,8 @@
 (global-set-key (kbd "M-w") 'kill-region)
 (global-set-key (kbd "C-e") 'yank)
 (global-set-key (kbd "M-e") 'yank-pop)
+
+
 
 ;; misc stuff
 (global-set-key (kbd "C-a") 'find-file)
