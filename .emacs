@@ -14,8 +14,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (auto-complete)))
-)
+ '(package-selected-packages (quote (web-mode auto-complete))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -27,7 +26,6 @@
 
 
 ;; setup env
-(ido-mode 1)
 (tool-bar-mode -1) ;; hide tool bar
 (setq column-number-mode t)
 (setq inhibit-startup-screen t) ;; disable welcome screen
@@ -71,9 +69,15 @@
 (global-auto-complete-mode t)
 (setq ac-auto-show-menu 0.2)
 (setq ac-use-menu-map t)
+(global-unset-key (kbd "C-p"))
+(global-unset-key (kbd "M-p"))
 (define-key ac-menu-map (kbd "C-n") 'nil)
 (define-key ac-menu-map (kbd "C-p") 'ac-next)
 (define-key ac-menu-map (kbd "M-p") 'ac-previous)
+<<<<<<< HEAD
+=======
+
+>>>>>>> aa79b68004794d50ba357d5a4b0fb59510b559a8
 
 
 ;; shell mode binding
@@ -87,6 +91,33 @@
 (define-key shell-mode-map (kbd "C-M-l") 'end-of-line)
 (define-key shell-mode-map (kbd "C-d") 'isearch-forward)
 
+
+
+(ido-mode 1)
+(add-hook 'ido-setup-hook 'ido-my-bindings)
+(defun ido-my-bindings ()
+  "Add keybindings for ido."
+  (define-key ido-completion-map " " 'ido-next-match))
+
+;; config web-mode
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+
+(define-key web-mode-map (kbd "C-d") 'isearch-forward)
+(define-key web-mode-map (kbd "C-s") 'nil)
+
+
+
+(require 'php-mode)
+(define-key php-mode-map (kbd "C-d") 'isearch-forward)
+(define-key php-mode-map (kbd "C-s") 'nil)
 
 
 ;; point moving command
@@ -111,6 +142,11 @@
 (global-set-key (kbd "M-j") 'backward-word)
 (global-set-key (kbd "C-M-j") 'beginning-of-line)
 (global-set-key (kbd "C-M-l") 'end-of-line)
+<<<<<<< HEAD
+=======
+(global-set-key (kbd "C-p") 'scroll-up-command)
+(global-set-key (kbd "M-p") 'scroll-down-command)
+>>>>>>> aa79b68004794d50ba357d5a4b0fb59510b559a8
 
 
 
@@ -128,6 +164,8 @@
 (define-key isearch-mode-map [?\C-s] 'isearch-repeat-backward)
 (define-key isearch-mode-map [?\C-e] 'isearch-yank-kill)
 
+
+
 ;; Editing command
 (global-unset-key (kbd "C-n"))
 (define-key key-translation-map [?\C-n] [?\C-?]) ;; remap backspace
@@ -139,6 +177,8 @@
 (global-set-key (kbd "M-w") 'kill-region)
 (global-set-key (kbd "C-e") 'yank)
 (global-set-key (kbd "M-e") 'yank-pop)
+
+
 
 ;; misc stuff
 (global-set-key (kbd "C-a") 'find-file)
@@ -155,7 +195,6 @@
 (defun smarter-move-beginning-of-line (arg)
   ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
   "Move point back to indentation of beginning of line.
-
 Move point to the first non-whitespace character on this line.
 If point is already there, move to the beginning of the line.
 Effectively toggle between the first non-whitespace character and
