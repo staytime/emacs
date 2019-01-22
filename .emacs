@@ -74,10 +74,7 @@
 (define-key ac-menu-map (kbd "C-n") 'nil)
 (define-key ac-menu-map (kbd "C-p") 'ac-next)
 (define-key ac-menu-map (kbd "M-p") 'ac-previous)
-<<<<<<< HEAD
-=======
 
->>>>>>> aa79b68004794d50ba357d5a4b0fb59510b559a8
 
 
 ;; shell mode binding
