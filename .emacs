@@ -139,11 +139,6 @@
 (global-set-key (kbd "M-j") 'backward-word)
 (global-set-key (kbd "C-M-j") 'beginning-of-line)
 (global-set-key (kbd "C-M-l") 'end-of-line)
-<<<<<<< HEAD
-=======
-(global-set-key (kbd "C-p") 'scroll-up-command)
-(global-set-key (kbd "M-p") 'scroll-down-command)
->>>>>>> aa79b68004794d50ba357d5a4b0fb59510b559a8
 
 
 
