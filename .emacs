@@ -109,12 +109,12 @@
 
 (define-key web-mode-map (kbd "C-d") 'isearch-forward)
 (define-key web-mode-map (kbd "C-s") 'nil)
-
-
+(define-key web-mode-map (kbd "M-a") 'find-file-other-window)
 
 (require 'php-mode)
 (define-key php-mode-map (kbd "C-d") 'isearch-forward)
 (define-key php-mode-map (kbd "C-s") 'nil)
+(define-key php-mode-map (kbd "M-a") 'find-file-other-window)
 
 
 ;; point moving command
