@@ -56,7 +56,6 @@
 
 
 ;; removing keybinding
-(global-unset-key (kbd "C-s"))
 (global-unset-key (kbd "M-s"))
 (global-unset-key (kbd "C-M-s"))
 
@@ -108,12 +107,12 @@
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
 (define-key web-mode-map (kbd "C-d") 'isearch-forward)
-(define-key web-mode-map (kbd "C-s") 'nil)
+(define-key web-mode-map (kbd "C-s") 'replace-string)
 (define-key web-mode-map (kbd "M-a") 'find-file-other-window)
 
 (require 'php-mode)
 (define-key php-mode-map (kbd "C-d") 'isearch-forward)
-(define-key php-mode-map (kbd "C-s") 'nil)
+(define-key php-mode-map (kbd "C-s") 'reppace-string)
 (define-key php-mode-map (kbd "M-a") 'find-file-other-window)
 
 
@@ -232,12 +231,10 @@ point reaches the beginning or end of the buffer, stop there."
   (find-file "~/.emacs"))
 
 (global-set-key (kbd "C-h u") 'open-config)
-
-
-
+(global-set-key (kbd "C-s") 'replace-string)
 
 ;; new function in trial
 ;; M-.		xref-find-definitions
-(global-set-key (kbd "C-\,") 'next-buffer)
-(global-set-key (kbd "M-\,") 'previous-buffer)
+;; (global-set-key (kbd "C-\,") 'next-buffer)
+;; (global-set-key (kbd "M-\,") 'previous-buffer)
 
