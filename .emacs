@@ -6,29 +6,17 @@
 ;; setup package
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-(package-initialize)
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/"))
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(column-number-mode t)
  '(package-selected-packages
-   '(
-     yaml-mode
-     fira-code-mode
-     lua-mode
-     terraform-mode
-     web-mode
-     auto-complete
-     php-mode
-     cc-mode
-     ))
- 
- '(show-paren-mode t)
- '(tool-bar-mode nil))
+   '(eaf-browser helpful counsel ivy-rich which-key ivy command-log-mode use-package pyvenv pyenv-mode yaml-mode terraform-mode web-mode auto-complete php-mode))
+ '(show-paren-mode t))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -37,12 +25,20 @@
  ;; If there is more than one, they won't work right.
  )
 
+(package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
+
+(require 'use-package)
+(setq use-package-always-ensure t)
+
 
 
 ;; setup env
-;; (tool-bar-mode -1) ;; hide tool bar
-(if window-system
-    (tool-bar-mode -1))
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+;;(scroll-bar-mode -1)
+
 (setq column-number-mode t)
 (setq inhibit-startup-screen t) ;; disable welcome screen
 (electric-pair-mode 1) ;; enbale electric-pair-mode
@@ -56,13 +52,12 @@
 
 ;; set custome font
 ;; (setq st-chosen-font "Fira Code light-11")
-(setq st-chosen-font "Fira Code-11")
+(setq st-chosen-font "Fira Code 16")
 (set-face-attribute 'default nil :font st-chosen-font)
 (set-frame-font st-chosen-font nil t)
 
 (defun post-load-stuff ()
   (interactive)
-  (toggle-frame-maximized)
   (split-window-horizontally))
 
 (add-hook 'window-setup-hook 'post-load-stuff t)
@@ -70,8 +65,9 @@
 
 
 (defun smarter-move-beginning-of-line (arg)
-  ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
-  "Move point back to indentation of beginning of line.
+  "source: http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
+
+Move point back to indentation of beginning of line.
 Move point to the first non-whitespace character on this line.
 If point is already there, move to the beginning of the line.
 Effectively toggle between the first non-whitespace character and
@@ -79,7 +75,7 @@ the beginning of the line.
 
 If ARG is not nil or 1, move forward ARG - 1 lines first.  If
 point reaches the beginning or end of the buffer, stop there."
-  
+
   (interactive "^p")
   (setq arg (or arg 1))
 
@@ -114,11 +110,14 @@ point reaches the beginning or end of the buffer, stop there."
   (global-unset-key (kbd "C-p"))
   (global-unset-key (kbd "M-p"))
   (global-unset-key (kbd "C-M-k"))
-  
+
+  (global-unset-key (kbd "C-b"))
+  (global-unset-key (kbd "M-b"))
+
   )
 
 (defun setup-base-keymap (v-mode-map)
-  "adjusting @v-mode-map to my liking." 
+  "adjusting @v-mode-map to my liking."
 
 
   (define-key v-mode-map (kbd "C-k") 'next-line)
@@ -131,17 +130,17 @@ point reaches the beginning or end of the buffer, stop there."
   (define-key v-mode-map (kbd "C-\;") 'comment-line)
   (define-key v-mode-map (kbd "M-\;") 'comment-dwim)
 
-  
+
   (define-key v-mode-map (kbd "M-n") 'backward-kill-word)
   (define-key v-mode-map (kbd "M-m") 'kill-whole-line)
 
-  
-  
+
+
   (define-key v-mode-map (kbd "C-r") 'marking-line)
-  
+
   (define-key v-mode-map (kbd "C-s") 'replace-string)
-  
-  (define-key v-mode-map (kbd "C-d") 'isearch-forward)  
+
+  (define-key v-mode-map (kbd "C-d") 'isearch-forward)
   (define-key v-mode-map (kbd "M-n") 'backward-kill-word)
 
   (define-key v-mode-map (kbd "C-e") 'yank)
@@ -149,9 +148,9 @@ point reaches the beginning or end of the buffer, stop there."
   (define-key v-mode-map (kbd "C-w") 'kill-ring-save)
   (define-key v-mode-map (kbd "M-w") 'kill-region)
 
-  
+
   (define-key v-mode-map (kbd "C-o") 'other-window)
-  (define-key v-mode-map (kbd "C-a") 'find-file)
+  (define-key v-mode-map (kbd "C-a") 'counsel-find-file)
   (define-key v-mode-map (kbd "M-a") 'find-file-other-window)
 
   )
@@ -183,13 +182,16 @@ point reaches the beginning or end of the buffer, stop there."
 
 
 
-
 ;; setup for shell
 (require 'shell)
-(require 'comint)
 (setup-base-keymap shell-mode-map)
 (define-key shell-mode-map (kbd "C-p") 'comint-previous-input)
 (define-key shell-mode-map (kbd "M-p") 'comint-next-input)
+(define-key shell-mode-map (kbd "C-d") 'isearch-forward)
+
+(require 'comint)
+(setup-base-keymap comint-mode-map)
+
 
 
 
@@ -225,11 +227,13 @@ point reaches the beginning or end of the buffer, stop there."
 (require 'cc-mode)
 (setup-base-keymap c-mode-map)
 (setup-base-keymap c++-mode-map)
-
+(setq-default c-basic-offset 4)
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c++-mode))
 
-;; point moving command
 
+
+
+;; point moving command
 ;; disconnect C-i from TAB
 ;; more info:
 ;; https://emacs.stackexchange.com/questions/220/how-to-bind-c-i-as-different-from-tab
@@ -289,7 +293,7 @@ point reaches the beginning or end of the buffer, stop there."
 
 (global-set-key (kbd "C-o") 'other-window)
 (global-set-key (kbd "M-o") 'revert-buffer-no-confirm)
-(global-set-key (kbd "C-M-o") 'switch-to-buffer)
+(global-set-key (kbd "C-M-o") 'counsel-switch-buffer)
 
 (global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "C-\;") 'comment-line)
@@ -308,12 +312,19 @@ point reaches the beginning or end of the buffer, stop there."
 (global-set-key (kbd "C-x w") 'create-buffer)
 
 
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
 (defun open-config ()
   (interactive)
   (find-file "~/.emacs"))
 
 (global-set-key (kbd "C-h u") 'open-config)
 (global-set-key (kbd "C-s") 'replace-string)
+
+
+(global-set-key (kbd "C-b") 'scroll-other-window)
+(global-set-key (kbd "M-b") 'scroll-other-window-down)
+
 
 ;; new function in trial
 ;; M-.		xref-find-definitions
@@ -322,11 +333,104 @@ point reaches the beginning or end of the buffer, stop there."
 
 (setq-default indent-tabs-mode nil)
 
+(use-package lua-mode
+  :config
+  (setq lua-indent-level 2)
 
-(setq lua-indent-level 2)
+  )
+
 (put 'upcase-region 'disabled nil)
 
 
 
 
-;; (global-fira-code-mode)
+;; setup run-python setting
+
+(use-package python
+  :bind (:map inferior-python-mode-map
+              ("C-d" . isearch-forward)
+              ("M-n" . backward-kill-word)
+              ("C-M-p" . backward-kill-word)
+              )
+  :config
+  (setq python-shell-interpreter "python3")
+  (setq python-shell-completion-native-disabled-interpreters '("python3"))
+
+  )
+
+;; new stuff
+(use-package ivy
+  :diminish
+  :bind (
+         ;("C-s" . swiper)
+         :map ivy-minibuffer-map
+         ;("TAB" . ivy-alt-done)
+         ;("C-l" . ivy-alt-done)
+         ("C-p" . ivy-next-line)
+         ("M-p" . ivy-previous-line)
+         :map ivy-switch-buffer-map
+         ("C-p" . ivy-next-line)
+         ("M-p" . ivy-previous-line)
+         ("C-j" . nil)
+         ;;("C-m" . ivy-done)
+         )
+
+
+  :init
+  (ivy-mode 1)
+  :config
+  (setq ivy-use-virtual-buffers  (setq ivy-wrap t))
+
+  )
+
+(use-package ivy-rich
+  :diminish
+  :init
+  (ivy-rich-mode 1)
+  )
+
+(use-package counsel
+  :diminish
+  :bind
+  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-variable] . counsel-describe-variable)
+  ("M-x" . counsel-M-x)
+
+  )
+
+
+;;(global-display-line-numbers-mode t)
+
+(use-package which-key
+  :diminish
+  which-key-mode
+  :init
+  (which-key-mode 1)
+  :config
+  (setq which-key-idle-delay 2)
+  )
+
+(use-package helpful
+  :bind
+  ([remap describe-command] . helpful-command)
+  ([remap describe-key] . helpful-key)
+  )
+
+
+(use-package magit)
+
+(load-theme 'deeper-blue 't)
+
+
+(use-package pyvenv
+  :ensure t
+  :config
+  (pyvenv-mode t)
+
+  ;; Set correct Python interpreter
+  (setq pyvenv-post-activate-hooks
+        (list (lambda ()
+                (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python3")))))
+  (setq pyvenv-post-deactivate-hooks
+        (list (lambda ()
+                (setq python-shell-interpreter "python3")))))
