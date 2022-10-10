@@ -28,10 +28,17 @@
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
+(package-install-selected-packages)
+
+
 
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+
+
+(if window-system
+  (load-theme 'deeper-blue 't))
 
 
 ;; setup env
@@ -419,7 +426,6 @@ point reaches the beginning or end of the buffer, stop there."
 
 (use-package magit)
 
-(load-theme 'deeper-blue 't)
 
 
 (use-package pyvenv
