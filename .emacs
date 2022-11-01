@@ -9,13 +9,14 @@
 (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/"))
 
 
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(eaf-browser helpful counsel ivy-rich which-key ivy command-log-mode use-package pyvenv pyenv-mode yaml-mode terraform-mode web-mode auto-complete php-mode))
+   '(all-the-icons-dired dired-single org-roam org-ream "use-package" ox-twbs org-auto-tangle org-bullets rg diminish counsel-projectile projectile general all-the-icons doom-themes org-mode eaf-browser helpful counsel ivy-rich which-key ivy command-log-mode use-package pyvenv pyenv-mode yaml-mode terraform-mode web-mode auto-complete php-mode))
  '(show-paren-mode t))
 
 (custom-set-faces
@@ -28,23 +29,33 @@
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
-(package-install-selected-packages)
+;; (package-install-selected-packages)
+(package-install 'use-package)
 
 
 
 (require 'use-package)
 (setq use-package-always-ensure t)
+(use-package diminish)
+(use-package general)
+
+;; setup use-package
 
 
+;; (use-package zeno-theme)
 
-(if window-system
-  (load-theme 'deeper-blue 't))
+;; (if window-system
+;;   (load-theme 'deeper-blue 't))
+
 
 
 ;; setup env
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 ;;(scroll-bar-mode -1)
+
+(setq history-length 30)
+(savehist-mode 1)
 
 (setq column-number-mode t)
 (setq inhibit-startup-screen t) ;; disable welcome screen
@@ -68,6 +79,7 @@
   (split-window-horizontally))
 
 (add-hook 'window-setup-hook 'post-load-stuff t)
+
 
 
 
@@ -121,6 +133,17 @@ point reaches the beginning or end of the buffer, stop there."
   (global-unset-key (kbd "C-b"))
   (global-unset-key (kbd "M-b"))
 
+  (global-unset-key (kbd "C-y"))
+  (global-unset-key (kbd "M-y"))
+  (global-unset-key (kbd "C-M-y"))
+
+  (global-unset-key (kbd "C-q"))
+
+  (global-unset-key (kbd "M-f"))
+  (global-unset-key (kbd "C-M-o"))
+  ;; (global-unset-key (kbd "C-["))
+  ;; (global-unset-key (kbd "C-]"))
+
   )
 
 (defun setup-base-keymap (v-mode-map)
@@ -159,6 +182,8 @@ point reaches the beginning or end of the buffer, stop there."
   (define-key v-mode-map (kbd "C-o") 'other-window)
   (define-key v-mode-map (kbd "C-a") 'counsel-find-file)
   (define-key v-mode-map (kbd "M-a") 'find-file-other-window)
+  (define-key v-mode-map (kbd "C-a") 'find-file)
+  (define-key v-mode-map (kbd "C-M-v") 'end-of-buffer)
 
   )
 
@@ -170,8 +195,7 @@ point reaches the beginning or end of the buffer, stop there."
 
 
 (setup-default-behaviour)
-
-
+(global-auto-revert-mode)
 
 
 
@@ -202,11 +226,11 @@ point reaches the beginning or end of the buffer, stop there."
 
 
 
-(ido-mode 1)
-(add-hook 'ido-setup-hook 'ido-my-bindings)
-(defun ido-my-bindings ()
-  "Add keybindings for ido."
-  (define-key ido-completion-map " " 'ido-next-match))
+;; (ido-mode 1)
+;; (add-hook 'ido-setup-hook 'ido-my-bindings)
+;; (defun ido-my-bindings ()
+;;   "Add keybindings for ido."
+;;   (define-key ido-completion-map " " 'ido-next-match))
 
 
 
@@ -261,6 +285,7 @@ point reaches the beginning or end of the buffer, stop there."
 (global-set-key (kbd "M-j") 'backward-word)
 (global-set-key (kbd "C-M-j") 'beginning-of-line)
 (global-set-key (kbd "C-M-l") 'end-of-line)
+(global-set-key (kbd "C-M-v") 'end-of-buffer)
 
 
 
@@ -283,6 +308,7 @@ point reaches the beginning or end of the buffer, stop there."
 ;; Editing command
 (global-unset-key (kbd "C-n"))
 (define-key key-translation-map [?\C-n] [?\C-?]) ;; remap backspace
+
 (global-set-key (kbd "M-n") 'backward-kill-word)
 (global-set-key (kbd "M-m") 'kill-whole-line)
 
@@ -295,12 +321,12 @@ point reaches the beginning or end of the buffer, stop there."
 
 
 ;; misc stuff
-(global-set-key (kbd "C-a") 'find-file)
+(global-set-key (kbd "C-a") 'counsel-find-file)
 (global-set-key (kbd "M-a") 'find-file-other-window)
 
 (global-set-key (kbd "C-o") 'other-window)
 (global-set-key (kbd "M-o") 'revert-buffer-no-confirm)
-(global-set-key (kbd "C-M-o") 'counsel-switch-buffer)
+
 
 (global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "C-\;") 'comment-line)
@@ -321,11 +347,7 @@ point reaches the beginning or end of the buffer, stop there."
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-(defun open-config ()
-  (interactive)
-  (find-file "~/.emacs"))
 
-(global-set-key (kbd "C-h u") 'open-config)
 (global-set-key (kbd "C-s") 'replace-string)
 
 
@@ -340,13 +362,42 @@ point reaches the beginning or end of the buffer, stop there."
 
 (setq-default indent-tabs-mode nil)
 
+
+
+
+
+
+
+(defun staytime/open-config ()
+  (interactive)
+  (find-file "~/.emacs"))
+
+(defun staytime/open-notebook ()
+  (interactive)
+  (find-file "~/notebook.org"))
+
+(general-define-key
+ :prefix "C-h"
+ "u" 'staytime/open-config
+ "DEL" 'staytime/open-notebook)
+
+(general-define-key
+ :prefix "C-x"
+ "!" 'eval-region)
+;; (dired "~/work-sync")
+
+
+
+;; (add-hook 'dired-mode-hook (lambda () (auto-revert-mode)))
+
+
 (use-package lua-mode
   :config
-  (setq lua-indent-level 2)
-
-  )
+  (setq lua-indent-level 2))
 
 (put 'upcase-region 'disabled nil)
+
+
 
 
 
@@ -355,9 +406,7 @@ point reaches the beginning or end of the buffer, stop there."
 
 (use-package python
   :bind (:map inferior-python-mode-map
-              ("C-d" . isearch-forward)
               ("M-n" . backward-kill-word)
-              ("C-M-p" . backward-kill-word)
               )
   :config
   (setq python-shell-interpreter "python3")
@@ -367,9 +416,9 @@ point reaches the beginning or end of the buffer, stop there."
 
 ;; new stuff
 (use-package ivy
-  :diminish
+  :diminish ivy-mode
   :bind (
-         ;("C-s" . swiper)
+
          :map ivy-minibuffer-map
          ;("TAB" . ivy-alt-done)
          ;("C-l" . ivy-alt-done)
@@ -390,46 +439,112 @@ point reaches the beginning or end of the buffer, stop there."
 
   )
 
+(use-package swiper
+  :after ivy
+  :bind (([remap isearch-forward] . swiper)
+         :map swiper-map
+         ("C-d" . swiper-C-s)
+         ("C-s" . swiper-isearch-C-r)))
+
+
 (use-package ivy-rich
   :diminish
-  :init
-  (ivy-rich-mode 1)
-  )
+  :init (ivy-rich-mode 1))
 
 (use-package counsel
   :diminish
   :bind
   ([remap describe-function] . counsel-describe-function)
   ([remap describe-variable] . counsel-describe-variable)
-  ("M-x" . counsel-M-x)
-
+  ([remap execute-extended-command] . counsel-M-x)
+  ([remap dired] . counsel-dired)
+  ("C-x d" . counsel-dired)
+  ("C-M-o" . counsel-switch-buffer)
   )
 
+(general-define-key
+ :keymaps 'counsel-describe-map
+ "C-l" 'forward-char
+ "C-j" 'backward-char
+ "C-u" 'staytime/open-notebook)
 
 ;;(global-display-line-numbers-mode t)
 
+
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+
+
 (use-package which-key
   :diminish
-  which-key-mode
-  :init
-  (which-key-mode 1)
+  :init (which-key-mode 1)
   :config
-  (setq which-key-idle-delay 2)
-  )
+  (setq which-key-idle-delay 2))
 
 (use-package helpful
+  :commands (helpful-callable helpful-variable helpful-command helpful-key)
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
   :bind
+  ([remap describe-function] . counsel-describe-function)
   ([remap describe-command] . helpful-command)
-  ([remap describe-key] . helpful-key)
-  )
+  ([remap describe-variable] . counsel-describe-variable)
+  ([remap describe-key] . helpful-key))
+
+;; (use-package helpful
+;;   :bind
+;;   ([remap describe-command] . helpful-command)
+;;   ([remap describe-key] . helpful-key)
+;;   )
 
 
-(use-package magit)
+
+(use-package doom-themes
+  :if window-system
+  :init (load-theme 'doom-palenight 't))
+
+;; :if window-system
+(use-package doom-modeline
+  :init (doom-modeline-mode 1)
+  :custom (doom-modeline-height 16))
+
+(use-package all-the-icons
+  :if (display-graphic-p)
+  :custom (all-the-icons 1.1))
+
+(setq-default left-margin-width 1 right-margin-width 1)
+
+
+
+
+(use-package projectile
+  :diminish projectile-mode
+  :config (projectile-mode)
+  :custom (projectile-completion-system 'ivy)
+  :bind-keymap
+  ("C-c p" . projectile-command-map)
+  :init
+  (setq projectile-switch-project-action #'projectile-dired))
+
+(use-package rg)
+
+(use-package counsel-projectile
+  :config (counsel-projectile-mode))
+
+
+
+(use-package magit
+  :config
+  (add-hook 'after-save-hook 'magit-after-save-refresh-status t)
+  :bind
+  ("C-p" . magit-display-buffer))
+
 
 
 
 (use-package pyvenv
-  :ensure t
   :config
   (pyvenv-mode t)
 
@@ -440,3 +555,110 @@ point reaches the beginning or end of the buffer, stop there."
   (setq pyvenv-post-deactivate-hooks
         (list (lambda ()
                 (setq python-shell-interpreter "python3")))))
+
+(defun staytime/org-toggle-display ()
+  (interactive)
+  (org-toggle-link-display)
+  (if org-link-descriptive (org-display-inline-images) (org-remove-inline-images)))
+
+(defun staytime/org-mode-setup ()
+  (org-indent-mode)
+  (org-display-inline-images))
+
+(use-package org
+  :pin org
+  ;; :custom
+  ;; (org-time-stamp-custom-formats '("<%Y-%m-%d %a>" . "<%Y-%m-%d %a %H:%M>" . "<%Y-%m>"))
+
+  :config
+  (setq org-html-checkbox-type 'unicode)
+  (setq org-image-actual-width 'nil)
+  (setq shr-max-image-proportion 0.8)
+  (setq org-confirm-babel-evaluate 'nil)
+
+  ;; setup python command for org-babel-execute-src-block
+  (setq org-babel-python-command "python3")
+
+
+  :hook (org-mode . staytime/org-mode-setup))
+
+
+(org-babel-do-load-languages
+  'org-babel-load-languages
+  '((emacs-lisp . t)
+    (python . t)
+    (org . t))
+  )
+
+(general-define-key
+ :keymaps 'org-mode-map
+ "C-j" 'backward-char
+ [remap backward-paragraph] 'org-backward-element
+ [remap forward-paragraph] 'org-forward-element
+ "C-c C-x C-v" 'staytime/org-toggle-display
+ )
+
+
+
+
+(use-package org-bullets
+  :after org
+  :hook (org-mode . org-bullets-mode))
+
+(use-package org-auto-tangle
+  :defer t)
+
+
+(use-package dired-single)
+(require 'dired-single)
+(setq delete-by-moving-to-trash t)
+(setq global-auto-revert-mode t)
+(add-hook 'dired-mode-hook (lambda () (auto-revert-mode)))
+
+(general-define-key
+ :keymaps 'dired-mode-map
+ "C-o" 'other-window
+ "C-p" 'dired-display-file
+ "C-c d" 'dired-create-directory
+ [remap dired-find-file] 'dired-single-buffer
+ [remap dired-mouse-find-file-other-window] 'dired-single-buffer-mouse
+ [remap dired-up-directory] 'dired-single-up-directory
+ )
+
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode)
+  )
+
+
+
+
+(use-package org-roam
+  :custom
+  (org-roam-directory "~/work-sync/org-roam")
+  (org-roam-dailies-directory "journal/")
+  ;; (org-roam-directory "~/work-sync/org-roam/")
+  ;; (org-roam-completion-everywhere t)
+  :config
+  (org-roam-db-autosync-enable)
+  :bind
+  ("C-h DEL" . org-roam-dailies-find-today)
+  ("C-c SPC" . org-roam-dailies-capture-today)
+  )
+
+(general-define-key
+ :prefix "C-c n"
+ "l" 'org-roam-buffer-toggle
+ "f" 'org-roam-node-find
+ "i" 'org-roam-node-insert
+ "d" 'org-roam-dailies-find-date
+ "SPC" 'org-roam-dailies-capture-today
+)
+
+;; (general-define-key
+;;  :keymaps 'org-roam-mode-map
+
+;;  )
+
+(general-define-key
+ "C-M-p" 'completion-at-point)
+;; (dired "~/work-sync/")
