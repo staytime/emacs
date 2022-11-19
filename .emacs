@@ -16,7 +16,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(all-the-icons-dired dired-single org-roam org-ream "use-package" ox-twbs org-auto-tangle org-bullets rg diminish counsel-projectile projectile general all-the-icons doom-themes org-mode eaf-browser helpful counsel ivy-rich which-key ivy command-log-mode use-package pyvenv pyenv-mode yaml-mode terraform-mode web-mode auto-complete php-mode))
+   '(todoist all-the-icons-dired dired-single org-roam org-ream "use-package" ox-twbs org-auto-tangle org-bullets rg diminish counsel-projectile projectile general all-the-icons doom-themes org-mode eaf-browser helpful counsel ivy-rich which-key ivy command-log-mode use-package pyvenv pyenv-mode yaml-mode terraform-mode web-mode auto-complete php-mode))
  '(show-paren-mode t))
 
 (custom-set-faces
@@ -33,7 +33,21 @@
 (package-install 'use-package)
 
 
+;; ph => place holder
+(defun staytime/ph-previous-line ()
+  (interactive))
 
+(defun staytime/ph-next-line ()
+  (interactive))
+
+(defun staytime/ph-backward-char ()
+  (interactive))
+
+(defun staytime/ph-forward-char ()
+  (interactive))
+
+
+;; mini requirement setup
 (require 'use-package)
 (setq use-package-always-ensure t)
 (use-package diminish)
@@ -114,12 +128,6 @@ point reaches the beginning or end of the buffer, stop there."
   (smarter-move-beginning-of-line nil)
   (set-mark-command nil)
   (end-of-line))
-
-(defun create-buffer ()
-  "create empty buffer"
-  (interactive)
-  (switch-to-buffer (generate-new-buffer "new-file")))
-
 
 
 (defun setup-default-behaviour ()
@@ -234,18 +242,6 @@ point reaches the beginning or end of the buffer, stop there."
 
 
 
-;; setup for web-mode
-(require 'web-mode)
-(setup-base-keymap web-mode-map)
-
-(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
 
 
@@ -342,7 +338,6 @@ point reaches the beginning or end of the buffer, stop there."
 
 
 
-(global-set-key (kbd "C-x w") 'create-buffer)
 
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -363,7 +358,7 @@ point reaches the beginning or end of the buffer, stop there."
 (setq-default indent-tabs-mode nil)
 
 
-
+(setq js-indent-level 2)
 
 
 
@@ -372,18 +367,19 @@ point reaches the beginning or end of the buffer, stop there."
   (interactive)
   (find-file "~/.emacs"))
 
-(defun staytime/open-notebook ()
+(defun staytime/create-buffer ()
+  "create empty buffer"
   (interactive)
-  (find-file "~/notebook.org"))
+  (switch-to-buffer (generate-new-buffer "new-file")))
 
 (general-define-key
  :prefix "C-h"
- "u" 'staytime/open-config
- "DEL" 'staytime/open-notebook)
+ "u" 'staytime/open-config)
 
 (general-define-key
  :prefix "C-x"
- "!" 'eval-region)
+ "!" 'eval-region
+ "w" 'staytime/create-buffer)
 ;; (dired "~/work-sync")
 
 
@@ -398,9 +394,24 @@ point reaches the beginning or end of the buffer, stop there."
 (put 'upcase-region 'disabled nil)
 
 
+(use-package web-mode
+  :mode
+  ("\\.html?\\'" . web-mode)
+  ("\\.js?\\'" . web-mode)
+  :config
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-enable-current-element-highlight t)
+  (setq web-mode-enable-css-colorization t)
+  )
 
-
-
+(general-define-key
+ :keymaps 'web-mode-map
+ "C-M-i" 'web-mode-tag-match
+ "M-i" 'web-mode-tag-previous
+ "M-k" 'web-mode-tag-next
+ )
 
 ;; setup run-python setting
 
@@ -563,7 +574,20 @@ point reaches the beginning or end of the buffer, stop there."
 
 (defun staytime/org-mode-setup ()
   (org-indent-mode)
-  (org-display-inline-images))
+  (org-display-inline-images)
+  (setq truncate-lines 'nil)
+
+  ;; (dolist (face '((org-level-1 . 1.2)
+  ;;                 (org-level-2 . 1.1)
+  ;;                 (org-level-3 . 1.05)
+  ;;                 (org-level-4 . 1.0)
+  ;;                 (org-level-5 . 1.1)
+  ;;                 (org-level-6 . 1.1)
+  ;;                 (org-level-7 . 1.1)
+  ;;                 (org-level-8 . 1.1)))
+  ;;    (set-face-attribute (car face) nil :font "Cantarell" :weight 'regular :height (cdr face)))
+
+  )
 
 (use-package org
   :pin org
@@ -578,9 +602,11 @@ point reaches the beginning or end of the buffer, stop there."
 
   ;; setup python command for org-babel-execute-src-block
   (setq org-babel-python-command "python3")
+  (setq org-ellipsis "⤵")
 
 
-  :hook (org-mode . staytime/org-mode-setup))
+  :hook
+  (org-mode . staytime/org-mode-setup))
 
 
 (org-babel-do-load-languages
@@ -597,8 +623,6 @@ point reaches the beginning or end of the buffer, stop there."
  [remap forward-paragraph] 'org-forward-element
  "C-c C-x C-v" 'staytime/org-toggle-display
  )
-
-
 
 
 (use-package org-bullets
@@ -622,13 +646,10 @@ point reaches the beginning or end of the buffer, stop there."
  "C-c d" 'dired-create-directory
  [remap dired-find-file] 'dired-single-buffer
  [remap dired-mouse-find-file-other-window] 'dired-single-buffer-mouse
- [remap dired-up-directory] 'dired-single-up-directory
- )
+ [remap dired-up-directory] 'dired-single-up-directory)
 
 (use-package all-the-icons-dired
-  :hook (dired-mode . all-the-icons-dired-mode)
-  )
-
+  :hook (dired-mode . all-the-icons-dired-mode))
 
 
 
@@ -638,22 +659,66 @@ point reaches the beginning or end of the buffer, stop there."
   (org-roam-dailies-directory "journal/")
   ;; (org-roam-directory "~/work-sync/org-roam/")
   ;; (org-roam-completion-everywhere t)
+
+  (org-roam-capture-templates '(("d" "default" plain "%?"
+                                 :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup\n#+title: ${title}\n#+author:\n")
+                                 :unnarrowed t))
+   )
+
+  (org-roam-dailies-capture-templates
+   '(("d" "default"
+      entry "* %?"
+      :target (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n")
+      :empty-lines-before 1)
+
+     ("s" "time[s]tmp included"
+      entry "* entry@%T %?"
+      :target (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n")
+      :empty-lines-before 1)
+
+     ("t" "todo"
+      entry "* TODO %? [0/0]"
+      :target (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n")
+      :empty-lines-before 1)
+
+     ))
+
   :config
   (org-roam-db-autosync-enable)
-  :bind
-  ("C-h DEL" . org-roam-dailies-find-today)
-  ("C-c SPC" . org-roam-dailies-capture-today)
   )
+
+(defun staytime/open-dailies-today ()
+  (interactive)
+  (org-roam-dailies-goto-today "d"))
+
+
+
+(general-define-key
+ "C-h DEL" 'staytime/open-dailies-today
+ "C-c SPC" 'org-roam-dailies-capture-today)
+
+(require 'org-roam)
+(require 'org-roam-dailies)
+(defun staytime/org-roam-goto-last-note ()
+  (interactive)
+  (setq l (car (last (org-roam-dailies--list-files))))
+  (when l
+    (find-file l)
+    (run-hooks 'org-roam-dailies-find-file-hook)))
+
 
 (general-define-key
  :prefix "C-c n"
  "l" 'org-roam-buffer-toggle
  "f" 'org-roam-node-find
  "i" 'org-roam-node-insert
- "d" 'org-roam-dailies-find-date
- "SPC" 'org-roam-dailies-capture-today
-)
 
+ "d" 'org-roam-dailies-find-directory
+ "SPC" 'org-roam-dailies-capture-today
+ "<" 'org-roam-dailies-goto-previous-note
+ ">" 'org-roam-dailies-goto-next-note
+ "n" 'staytime/org-roam-goto-last-note
+)
 ;; (general-define-key
 ;;  :keymaps 'org-roam-mode-map
 
